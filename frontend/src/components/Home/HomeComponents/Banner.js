@@ -87,11 +87,11 @@ export default function Carrousell() {
     </div>
     <div className="moving-banner">
       <div className="moving-banner-content">
-        <span>NUEVAS OFERTAS &nbsp; NUEVAS OFERTAS &nbsp; NUEVAS OFERTAS &nbsp;  </span>
-        <span>NUEVAS OFERTAS &nbsp; NUEVAS OFERTAS &nbsp; NUEVAS OFERTAS &nbsp;   </span>
-        <span>NUEVAS OFERTAS &nbsp; NUEVAS OFERTAS &nbsp; NUEVAS OFERTAS &nbsp;   </span>
-        <span>NUEVAS OFERTAS &nbsp; NUEVAS OFERTAS &nbsp; NUEVAS OFERTAS &nbsp;   </span>
-        <span>NUEVAS OFERTAS &nbsp; NUEVAS OFERTAS &nbsp; NUEVAS OFERTAS &nbsp;   </span>
+        <span>NUEVAS PRUEBAS &nbsp; NUEVAS OFERTAS &nbsp; NUEVAS PRUEBAS &nbsp;  </span>
+        <span>NUEVAS PRUEBAS &nbsp; NUEVAS OFERTAS &nbsp; NUEVAS PRUEBAS &nbsp;   </span>
+        <span>NUEVAS PRUEBAS &nbsp; NUEVAS OFERTAS &nbsp; NUEVAS PRUEBAS &nbsp;   </span>
+        <span>NUEVAS PRUEBAS &nbsp; NUEVAS OFERTAS &nbsp; NUEVAS PRUEBAS &nbsp;   </span>
+        <span>NUEVAS PRUEBAS &nbsp; NUEVAS OFERTAS &nbsp; NUEVAS PRUEBAS &nbsp;   </span>
       </div>
     </div>
     </div>
