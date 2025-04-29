@@ -11,7 +11,7 @@
 
 # production
 */build
-
+#Do not upload .env
 # misc
 .DS_Store
 .env.local
