@@ -19,7 +19,7 @@ services:
 
     ports:
 
-      - "8080:${BACKEND_PORT}"
+      - "${BACKEND_PORT}:8080"
 
     depends_on:
       - db
@@ -32,8 +32,9 @@ services:
       MYSQL_HOST: db
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_PORT: ${MYSQL_PORT}
-    entrypoint: ["./wait-for-it.sh", "db", "--", "java", "-jar", "/app.jar"]
-    # entrypoint: ["java", "-jar", "/app.jar"]
+      MYSQL_URL : ${MYSQL_URL}
+    #entrypoint: ["./wait-for-it.sh", "db", "--", "java", "-jar", "/app.jar"]
+    entrypoint: ["java", "-jar", "/app.jar"]
 
   db:
     image: mysql:5.7
