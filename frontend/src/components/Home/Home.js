@@ -3,6 +3,7 @@ import ProductList from "./HomeComponents/ProductList";
 import Navbar from "../Navbar/Navbar";
 import Footer from "../Footer/Footer";
 
+console.log(process.env.REACT_APP_API_URL);
 export default function Home() {
   return (
     <div>

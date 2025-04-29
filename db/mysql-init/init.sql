@@ -1,9 +1,18 @@
-CREATE DATABASE IF NOT EXISTS ECOMMERCE;
+CREATE DATABASE IF NOT EXISTS ecommerce;
 
--- Base de datos: full
-use ECOMMERCE;
+-- Base de datos: ecommerce
+USE ecommerce;
 
-CREATE TABLE clients (
+GRANT ALL PRIVILEGES on ecommerce.* TO 'ecommerce'@'172.24.0.2' identified by 'ecommerce';
+
+-- Crear tabla categories primero, ya que otras tablas dependen de ella
+CREATE TABLE IF NOT EXISTS categories(
+  id_category INT(10) PRIMARY KEY AUTO_INCREMENT,
+  category_name VARCHAR(100) NOT NULL
+);
+
+-- Crear la tabla clients
+CREATE TABLE IF NOT EXISTS clients (
   id_client int(10) AUTO_INCREMENT PRIMARY KEY,
   last_name varchar(20) NOT NULL,
   first_name varchar(10),
@@ -12,7 +21,8 @@ CREATE TABLE clients (
   password VARCHAR(255)
 );
 
-CREATE TABLE shippingaddress(
+-- Crear la tabla shippingaddress
+CREATE TABLE IF NOT EXISTS shippingaddress(
   id_address int(10) AUTO_INCREMENT PRIMARY KEY,
   street VARCHAR(150) NOT NULL,
   street_number VARCHAR(150) NOT NULL,
@@ -22,7 +32,8 @@ CREATE TABLE shippingaddress(
   zipcode VARCHAR(5) NOT NULL
 );
 
-CREATE TABLE orders (
+-- Crear la tabla orders que depende de clients y shippingaddress
+CREATE TABLE IF NOT EXISTS orders (
   id_order int(10) AUTO_INCREMENT PRIMARY KEY,
   id_client int(10),
   id_address int(10),
@@ -33,48 +44,44 @@ CREATE TABLE orders (
   FOREIGN KEY (id_address) REFERENCES shippingaddress (id_address)
 );
 
-
-CREATE TABLE CATEGORIES(
-  id_category INT(10) PRIMARY KEY AUTO_INCREMENT,
-  category_name VARCHAR(100) NOT NULL
-);
-
-CREATE TABLE products (
+-- Crear la tabla products que depende de categories
+CREATE TABLE IF NOT EXISTS products (
   id_product int(10) AUTO_INCREMENT PRIMARY KEY,
   product_name varchar(40),
-  unit_price decimal(12,4) check(unit_price > 0),
+  unit_price decimal(12,4) CHECK(unit_price > 0),
   product_description VARCHAR(150),
   id_category INT(10),
   FOREIGN KEY (id_category) REFERENCES categories(id_category)
 );
 
-
-CREATE TABLE orderDetails (
+-- Crear la tabla orderDetails que depende de orders y products
+CREATE TABLE IF NOT EXISTS orderDetails (
   id_order int(10),
   id_product int(10),
   unit_price decimal(12,4),
   quantity smallint(5),
   discount double,
   CONSTRAINT PRIMARY_KEY PRIMARY KEY(id_order, id_product),
-  CONSTRAINT ord_det FOREIGN KEY (id_order)   REFERENCES orders (id_order),
+  CONSTRAINT ord_det FOREIGN KEY (id_order) REFERENCES orders (id_order),
   CONSTRAINT det_pro FOREIGN KEY (id_product) REFERENCES products (id_product)
-  );
-
-CREATE TABLE INVENTORY (
-    id_inventory INT(10) PRIMARY KEY AUTO_INCREMENT,
-    id_product INT(10),
-    size VARCHAR(20) NOT NULL,
-    available_quantity INT NOT NULL check(available_quantity >= 0),
-    FOREIGN KEY (id_product) REFERENCES products(id_product)
 );
 
+-- Crear la tabla inventory que depende de products
+CREATE TABLE IF NOT EXISTS inventory (
+  id_inventory INT(10) PRIMARY KEY AUTO_INCREMENT,
+  id_product INT(10),
+  size VARCHAR(20) NOT NULL,
+  available_quantity INT NOT NULL CHECK(available_quantity >= 0),
+  FOREIGN KEY (id_product) REFERENCES products(id_product)
+);
 
-CREATE TABLE PRODUCTIMAGES(
+-- Crear la tabla PRODUCTIMAGES que depende de products
+CREATE TABLE IF NOT EXISTS productimages(
   id_product_image INT(10) PRIMARY KEY AUTO_INCREMENT,
   id_product INT(10),
   product_image_route VARCHAR(150) NOT NULL,
   FOREIGN KEY (id_product) REFERENCES products(id_product)
-  );
+);
 
 use Ecommerce;
 

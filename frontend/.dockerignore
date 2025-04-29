@@ -1,1 +1,3 @@
 node_modules/
+#Do not upload .env
+.env

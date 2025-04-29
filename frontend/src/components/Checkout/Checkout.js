@@ -13,7 +13,7 @@ export default function Checkout() {
     // const dispatch = useDispatch();
 
     // useEffect(() => {
-    //     fetch('http://localhost:8080/all')
+    //     fetch('http://process.env.REACT_APP_API_URL/all')
     //     .then(response => response.json())
     //     .then(data => dispatch(getProducts(data)))
     // },[dispatch])
@@ -21,7 +21,7 @@ export default function Checkout() {
     // const handleInputChange = (event) => {
     //     console.clear();
     //         if(event.target.value != ""){
-    //             fetch(`http://localhost:8080/products/searchByName/?name=${event.target.value}`)
+    //             fetch(`http://process.env.REACT_APP_API_URL/products/searchByName/?name=${event.target.value}`)
     //             .then(response => response.json())
     //             .then(data => data.map(producto => {
     //                 console.log("Product ID : " + producto.idProduct + " " + producto.productName)

@@ -8,10 +8,10 @@ services:
 
     ports:
 
-      - 3000:3000
+      - "3000:${FRONTEND_PORT}"
 
-    volumes:
-      - ./frontend/src:/app/src
+    depends_on:
+      - backend
 
   backend:
 
@@ -19,20 +19,40 @@ services:
 
     ports:
 
-      - 8080:8080
+      - "${BACKEND_PORT}:8080"
 
     depends_on:
       - db
 
-  db:
-    build: db/mysql-init
-    ports:
-      - 3306:3306
-    
-    volumes:
-      - ./db/mysql-init:/docker-entrypoint-initdb
-      - mysql-data:/var/lib/mysql
+    environment:
+      FRONTEND_IP: ${FRONTEND_IP}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_HOST: db
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_PORT: ${MYSQL_PORT}
+      MYSQL_URL : ${MYSQL_URL}
+    #entrypoint: ["./wait-for-it.sh", "db", "--", "java", "-jar", "/app.jar"]
+    entrypoint: ["java", "-jar", "/app.jar"]
 
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3306:${MYSQL_PORT}"
+    volumes:
+      - ./db/mysql-init/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 volumes:
   mysql-data:
     
