@@ -5,7 +5,18 @@ plugins {
 	id 'io.freefair.lombok' version '8.6'
 	id 'io.swagger.core.v3.swagger-gradle-plugin' version '2.2.22'
 }
-
+def loadEnv = {
+    File envFile = file('.env')
+    if (envFile.exists()) {
+        envFile.eachLine { line ->
+            if (!line.startsWith("#") && line.contains("=")) {
+                def (key, value) = line.split("=", 2)
+                // Ahora sí, environment solo aquí es válido
+                bootRun.environment key.trim(), value.trim()
+            }
+        }
+    }
+}
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
 
@@ -34,4 +45,8 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+bootRun {
+    loadEnv()
 }
