@@ -1,0 +1,62 @@
+# Docker
+# Build and push an image to Azure Container Registry
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+
+trigger:
+- main
+
+resources:
+- repo: self
+
+variables:
+  # Container registry service connection established during pipeline creation
+  dockerRegistryServiceConnection: 'ddf71576-3ea7-4417-9f12-743b5912f938'
+  imageRepository: 'backend'
+  containerRegistry: 'ecommercecontainer.azurecr.io'
+  dockerfilePath: '$(Build.SourcesDirectory)/backend/Dockerfile'
+  tag: '$(Build.BuildId)'
+
+  # Agent VM image name
+  vmImageName: 'ubuntu-latest'
+
+stages:
+- stage: Build_Jar
+  displayName: "Compile .jar with Gradle"
+  jobs:
+    - job: GradleBuild
+      displayName: ".jar building"
+      steps:
+        - task: Gradle@3
+          inputs:
+            workingDirectory: 'backend'
+            gradleWrapperFile: 'backend/gradlew'
+            gradleOptions: '-Xmx1024m'
+            tasks: build
+            publishJUnitResults: false
+        - task: CopyFiles@2
+          inputs:
+            contents: '**/build/libs/*.jar'
+            targetFolder: '$(Build.ArtifactStagingDirectory)'
+        - publish: $(Build.ArtifactStagingDirectory)
+          artifact: drop
+- stage: Build
+  displayName: Build and push stage
+  dependsOn: Build_Jar
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - download: current
+      artifact: drop
+    - task: Docker@2
+      displayName: Build and push an image to container registry
+      inputs:
+        command: buildAndPush
+        repository: $(imageRepository)
+        dockerfile: $(dockerfilePath)
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          $(tag)
+        arguments: '--build-arg JAR_FILE=$(Pipeline.Workspace)/drop/*.jar'
