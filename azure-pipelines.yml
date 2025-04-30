@@ -50,7 +50,9 @@ stages:
   - job: Build
     displayName: Build
     pool:
-      vmImage: $(vmImageName)
+      name: 'Default'
+      demands:
+      - agent.name -equals agentP
     steps:
     - download: current
       artifact: drop
