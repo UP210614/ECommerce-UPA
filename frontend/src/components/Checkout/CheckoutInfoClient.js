@@ -41,14 +41,14 @@ export default function CheckoutInfoCliente() {
     const username = 'ecommerceupa'; // Reemplaza con tu nombre de usuario de GeoNames
 
     useEffect(() => {
-        fetch(`http://api.geonames.org/countryInfoJSON?username=${username}`)
+        fetch(`api.geonames.org/countryInfoJSON?username=${username}`)
             .then(response => response.json())
             .then(data => setCountries(data.geonames || []))
             .catch(error => console.error('Error fetching countries:', error));
     }, []);
 
     const fetchStates = (countryCode) => {
-        fetch(`http://api.geonames.org/childrenJSON?geonameId=${countryCode}&username=${username}`)
+        fetch(`api.geonames.org/childrenJSON?geonameId=${countryCode}&username=${username}`)
             .then(response => response.json())
             .then(data => setStates(data.geonames || []))
             .catch(error => console.error('Error fetching states:', error));
@@ -122,7 +122,7 @@ export default function CheckoutInfoCliente() {
             };
 
             try {
-                const response = await fetch(`http://${process.env.REACT_APP_API_URL}/orders/addFullOrder`, {
+                const response = await fetch(`${process.env.REACT_APP_API_URL}orders/addFullOrder`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

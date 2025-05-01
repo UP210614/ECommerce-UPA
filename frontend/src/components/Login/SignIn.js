@@ -69,7 +69,7 @@ const SignIn = () => {
       };
 
       try {
-        const response = await fetch(`http://${process.env.REACT_APP_API_URL}/clients/saveClient`, {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}clients/saveClient`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

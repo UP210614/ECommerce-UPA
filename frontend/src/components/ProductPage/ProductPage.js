@@ -11,7 +11,7 @@ const ProductPage = () => {
   const [product, setProduct] = useState({});
 
   useEffect(() => {
-    fetch(`http://${process.env.REACT_APP_API_URL}/products/getAllInfoProduct/${id}`)
+    fetch(`${process.env.REACT_APP_API_URL}products/getAllInfoProduct/${id}`)
       .then(response => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
