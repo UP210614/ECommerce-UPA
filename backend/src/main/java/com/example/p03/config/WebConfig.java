@@ -16,13 +16,14 @@ public class WebConfig implements WebMvcConfigurer {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 String frontendIp = System.getenv("FRONTEND_IP");
-                String allowedOrigin = "http://" + frontendIp + ":3000";
-                
+                System.out.println("Frontend IP: " + frontendIp);
+                String allowedOrigin = frontendIp;
+                Boolean allowCredentials = Boolean.parseBoolean(System.getenv("ALLOW_CREDENTIALS"));
                 registry.addMapping("/**")
-                        .allowedOrigins(allowedOrigin)
+                        .allowedOrigins(allowedOrigin )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                        .allowedHeaders("Content-Type", "Access-Control-Allow-Headers", "Authorization", "X-Requested-With")
-                        .allowCredentials(true);
+                        .allowedHeaders("*")
+                        .allowCredentials(allowCredentials);
             }
         };
     }
