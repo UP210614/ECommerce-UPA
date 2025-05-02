@@ -27,7 +27,7 @@ stages:
         - task: Gradle@3
           inputs:
             workingDirectory: 'backend'
-            gradleWrapperFile: 'backend\gradlew.bat'
+            gradleWrapperFile: 'backend/gradlew'
             gradleOptions: '-Xmx1024m'
             tasks: build
             publishJUnitResults: false
