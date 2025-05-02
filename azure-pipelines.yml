@@ -55,8 +55,8 @@ stages:
       steps:
         - download: current
           artifact: drop
-        - script: ls -la backend/build/libs
-          displayName: "Verificar que se generó el .jar"
+        - script: ls -la $(Pipeline.Workspace)/drop
+          displayName: "Verificar que el .jar esta drop"
         - script: |
             mkdir -p backend/build/libs
             cp $(Pipeline.Workspace)/drop/*.jar backend/build/libs/
