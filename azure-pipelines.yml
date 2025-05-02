@@ -8,7 +8,7 @@ variables:
   dockerRegistryServiceConnection: 'ddf71576-3ea7-4417-9f12-743b5912f938'
   imageRepository: 'backend'
   containerRegistry: 'ecommercecontainer.azurecr.io'
-  dockerfilePath: '$(Build.SourcesDirectory)\backend\Dockerfile'
+  dockerfilePath: '$(Build.SourcesDirectory)/backend/Dockerfile'
   tag: '$(Build.BuildId)'
 
 pool:
@@ -31,7 +31,8 @@ stages:
             gradleOptions: '-Xmx1024m'
             tasks: build
             publishJUnitResults: false
-
+        - script: ls -la backend/build/libs
+          displayName: "Verificar que se generó el .jar"
         - task: CopyFiles@2
           inputs:
             contents: '**/build/libs/*.jar'
@@ -39,7 +40,7 @@ stages:
 
         - publish: $(Build.ArtifactStagingDirectory)
           artifact: drop
-
+        
 # Etapa 2: Construir imagen Docker y subir a ACR
 - stage: Build_And_Push_Image
   displayName: "Construir imagen y subir a ACR"
@@ -59,7 +60,8 @@ stages:
             mkdir -p backend/build/libs
             cp $(Pipeline.Workspace)/drop/*.jar backend/build/libs/
           displayName: 'Copiar .jar al contexto backend/build/libs'
-
+        - script: ls -la backend/build/libs
+          displayName: "Verificar que se generó el .jar"
         - task: Docker@2
           displayName: "Construir y subir imagen a ACR"
           inputs:
