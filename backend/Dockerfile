@@ -1,7 +1,7 @@
 # backend/Dockerfile
 FROM openjdk:17-jdk-alpine3.14
 
-ARG JAR_FILE=build/libs/*.jar
+ARG JAR_FILE=build/libs/p03-0.0.1-SNAPSHOT.jar
 COPY ${JAR_FILE} app.jar
 
 RUN apk update && apk add --no-cache mysql-client bash iputils
