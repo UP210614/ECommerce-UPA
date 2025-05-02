@@ -59,7 +59,7 @@ stages:
           displayName: "Verificar que el .jar esta drop"
         - script: |
             mkdir -p backend/build/libs
-            cp $(Pipeline.Workspace)/drop/build/libs/*.jar backend/build/libs/
+            cp $(Pipeline.Workspace)/drop/backend/build/libs/*.jar backend/build/libs/
           displayName: 'Copiar .jar al contexto backend/build/libs'
         - task: Docker@2
           displayName: "Construir y subir imagen a ACR"
