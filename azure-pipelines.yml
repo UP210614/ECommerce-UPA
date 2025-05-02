@@ -93,4 +93,8 @@ stages:
         demands:
           - agent.name -equals Docker Agent - Linux
       steps:
+      - script:  echo "REACT_APP_API_URL=$(REACT_API_URL)" > .env
+        env:
+         REACT_API_URL : $(REACT_API_URL)
       - script: ls -la
+
