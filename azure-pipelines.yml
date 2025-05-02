@@ -55,12 +55,10 @@ stages:
         - download: current
           artifact: drop
 
-        - task: CmdLine@2
+        - script: |
+            mkdir -p backend/build/libs
+            cp $(Pipeline.Workspace)/drop/*.jar backend/build/libs/
           displayName: 'Copiar .jar al contexto backend/build/libs'
-          inputs:
-            script: |
-              if not exist backend\build\libs mkdir backend\build\libs
-              copy "$(Pipeline.Workspace)\drop\*.jar" backend\build\libs\
 
         - task: Docker@2
           displayName: "Construir y subir imagen a ACR"
