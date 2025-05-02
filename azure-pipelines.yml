@@ -12,9 +12,9 @@ variables:
   tag: '$(Build.BuildId)'
 
 pool:
-  name: 'Default'
+  name: 'docker-linux-agent'
   demands:
-    - agent.name -equals agentP  # Cambia esto por el nombre de tu agente si es distinto
+    - agent.name -equals Docker Agent - Linux  # Cambia esto por el nombre de tu agente si es distinto
 
 stages:
 # Etapa 1: Compilar el .jar con Gradle
@@ -29,7 +29,7 @@ stages:
             workingDirectory: 'backend'
             gradleWrapperFile: 'backend\gradlew.bat'
             gradleOptions: '-Xmx1024m'
-            tasks: bootJar
+            tasks: build
             publishJUnitResults: false
 
         - task: CopyFiles@2
@@ -48,9 +48,9 @@ stages:
     - job: DockerBuild
       displayName: "Docker Build & Push"
       pool:
-        name: 'Default'
+        name: 'docker-linux-agent'
         demands:
-          - agent.name -equals agentP
+          - agent.name -equals Docker Agent - Linux
       steps:
         - download: current
           artifact: drop
