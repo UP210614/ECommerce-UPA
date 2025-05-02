@@ -70,3 +70,15 @@ stages:
             containerRegistry: $(dockerRegistryServiceConnection)
             tags: |
               $(tag)
+- stage: Deploy_Web_App
+  displayName: Deploy container to web app
+  dependsOn: Build_And_Push_Image
+  jobs:
+  - job: Deploy
+    displayName: Deploy
+    steps:
+    - task: AzureWebAppContainer@1
+      inputs:
+        azureSubscription: 'Azure subscription 1(7286d3c8-dcc9-4c06-8b82-b1ae61ed12f0)'
+        appName: 'ecommerceBackend'
+        containers: 'ecommercecontainer.azurecr.io/backend:$(tag)'
