@@ -55,13 +55,12 @@ stages:
       steps:
         - download: current
           artifact: drop
-
+        - script: ls -la backend/build/libs
+          displayName: "Verificar que se generó el .jar"
         - script: |
             mkdir -p backend/build/libs
             cp $(Pipeline.Workspace)/drop/*.jar backend/build/libs/
           displayName: 'Copiar .jar al contexto backend/build/libs'
-        - script: ls -la backend/build/libs
-          displayName: "Verificar que se generó el .jar"
         - task: Docker@2
           displayName: "Construir y subir imagen a ACR"
           inputs:
