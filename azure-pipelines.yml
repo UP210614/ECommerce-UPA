@@ -70,7 +70,7 @@ stages:
             containerRegistry: $(dockerRegistryServiceConnection)
             tags: |
               $(tag)
-- stage: Deploy_Web_App
+- stage: Deploy_Web_App_Backend
   displayName: Deploy container to web app
   dependsOn: Build_And_Push_Image
   jobs:
@@ -82,3 +82,15 @@ stages:
         azureSubscription: 'Azure subscription 1(7286d3c8-dcc9-4c06-8b82-b1ae61ed12f0)'
         appName: 'ecommerceBackend'
         containers: 'ecommercecontainer.azurecr.io/backend:$(tag)'
+- stage: Build_And_Push_Frontend
+  displayName: Build and push frontend image
+  dependsOn: Deploy_Web_App_Backend
+  jobs:
+    - job: DockerBuild
+      displayName: "Docker Build & Push"
+      pool:
+        name: 'docker-linux-agent'
+        demands:
+          - agent.name -equals Docker Agent - Linux
+      steps:
+      - script: ls -la
