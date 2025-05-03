@@ -7,9 +7,11 @@ resources:
 variables:
   dockerRegistryServiceConnection: 'ddf71576-3ea7-4417-9f12-743b5912f938'
   imageRepository: 'backend'
+  imageRepositoryFront: 'frontend' 
   containerRegistry: 'ecommercecontainer.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/backend/Dockerfile'
   tag: '$(Build.BuildId)'
+  dockerfilePathFront: '$(Build.SourcesDirectory)/frontend/Dockerfile'
 
 pool:
   name: 'docker-linux-agent'
@@ -93,8 +95,32 @@ stages:
         demands:
           - agent.name -equals Docker Agent - Linux
       steps:
-      - script:  echo "REACT_APP_API_URL=$(REACT_API_URL)" > .env
+      - script:  echo "REACT_APP_API_URL=$(REACT_API_URL)" > frontend/.env
+        displayName: "Create .env file for frontend"
         env:
          REACT_API_URL : $(REACT_API_URL)
-      - script: ls -la
+      - script: cat frontend/.env
+        displayName: "verifiy that .env file is created"
+      - task: Docker@2
+        displayName: "Build and push frontend image to acr"
+        inputs:
+          command: buildAndPush
+          repository: $(imageRepositoryFront)
+          Dockerfile: $(dockerfilePathFront)
+          containerRegistry: $(dockerRegistryServiceConnection)
+          tags: |
+              $(tag)
+- stage: Deploy_Web_App_Frontend
+  displayName: Deploy container to web app
+  dependsOn: Build_And_Push_Frontend
+  jobs:
+  - job: Deploy
+    displayName: Deploy
+    steps:
+    - task: AzureWebAppContainer@1
+      inputs:
+        azureSubscription: 'Azure subscription 1(7286d3c8-dcc9-4c06-8b82-b1ae61ed12f0)'
+        appName: 'ecommerceProject'
+        containers: 'ecommercecontainer.azurecr.io/frontend:$(tag)'
+
 
