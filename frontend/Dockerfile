@@ -27,9 +27,11 @@ FROM node:20.5.0-alpine3.18 as build-stage
 RUN addgroup front && adduser -S -G front front
 
 WORKDIR /app/
-COPY --chown=front package*.json ./
+COPY package*.json ./
 RUN npm install
-COPY --chown=front . .
+COPY . .
+
+RUN chown -R front:front /app
 
 USER front
 RUN npm run build
